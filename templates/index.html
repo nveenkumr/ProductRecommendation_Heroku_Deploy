@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block content %}
+<style>
+h2 {text-align: center;}
+p {text-align: center;}
+</style>
+<h2>Recommend Top 5 Products</h2>
+
+<div>
+    <form align="center" id="id-frm-recommendprod" method="post" enctype="multipart/form-data">
+        <label for="idtxtusername" class="upload-label">
+            Enter User Name:
+        </label>
+        <input type="text" id="idtxtusername" name="txtusername" value=""><br><br>
+        <button type="button" class="btn btn-primary btn-lg " id="btn-predict">Predict Top5 Products!</button>
+    </form>
+
+    <div class="loader" style="display:none;"></div>
+
+    <h3 align="center" id="result">
+        <span> </span>
+    </h3>
+
+    
+
+</div>
+
+{% endblock %}

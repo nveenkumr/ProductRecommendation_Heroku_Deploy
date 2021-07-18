@@ -1,1 +1,2 @@
-# ProductRecommendation_Heroku_Deploy
+# deploy-heroku
+Deploy an Image Classification Model on Heroku
