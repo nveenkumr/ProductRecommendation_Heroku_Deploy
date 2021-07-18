@@ -9,10 +9,6 @@ import numpy as np
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Keras
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-from keras.models import load_model
-from keras.preprocessing import image
 
 # Flask utils
 from flask import Flask, redirect, url_for, request, render_template,render_template_string
