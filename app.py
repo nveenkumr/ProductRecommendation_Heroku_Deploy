@@ -9,7 +9,6 @@ import numpy as np
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
 # Flask utils
 from flask import Flask, redirect, url_for, request, render_template,render_template_string
 from werkzeug.utils import secure_filename
@@ -19,7 +18,7 @@ from gevent.pywsgi import WSGIServer
 app = Flask(__name__)
 
 #1. Model saved with pickle
-MODEL_PATH = 'models/xgb_reg.pkl'
+MODEL_PATH = 'models/log_best_reg.pkl'
 print(" MODEL_PATH :",MODEL_PATH)
 with open(MODEL_PATH, 'rb') as pickle_file:
     sentiment_model_load = pickle.load(pickle_file)
