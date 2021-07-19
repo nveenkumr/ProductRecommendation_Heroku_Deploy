@@ -20,8 +20,10 @@ with open(tfidf_vect_path, 'rb') as pickle_file:
 # 3. Load  user prediction and processed reviews
 recommendation_PATH = 'models/recommednation_user_final_rating.csv'
 processed_reviews_path = 'data/sentiment_analysis_processed_reviews.csv'
+prod_positive_rate_path = 'models/products_positive_rate.csv'
 user_final_rating = pd.read_csv(recommendation_PATH ,index_col='user_name')
 processed_prod_df = pd.read_csv(processed_reviews_path)
+prod_positive_rate_df =pd.read_csv(prod_positive_rate_path) 
 
 # featurization of processed reviews
 def convert_text_features(processed_reviews):
@@ -59,7 +61,8 @@ def perform_sentiment_on_top20ProdReviews(username):# ,MODEL_PATH, recommendatio
     final_sentiment_df['prod_name'] = top20_prod_reviews['prod_name']
     return final_sentiment_df
 
-def cal_top5_prod(username):    
+def cal_top5_prod(username):
+    # this is the final function which can be used to call to predict the top 5 products (working in local machine)
     sentiment_top20_prods = perform_sentiment_on_top20ProdReviews(username)
     df = sentiment_top20_prods.pivot_table(index ='prod_name' , columns='predicted_sentiment' , values ='predicted_sentiment',
                               aggfunc ={ 'predicted_sentiment':'count'} )
@@ -71,4 +74,17 @@ def cal_top5_prod(username):
     #df = df.rename(columns ={'level_0':'Sno.' , 'prod_name':'ProductName'})
     
     return df['prod_name'][0:5]
+
+def cal_top5_prod_heroku(username):
+    
+    # this method uses existing postive product rate cv file to get the positive rate for all 20 products and then filter top 20
+    # Specially designed to work in Heroku 
+    top20_products = top20_prod_final_rating(username)
+    top20prod_df = top20_products.to_frame().reset_index().rename(columns={'index': 'prod_name'})
+    # merging with processed df to get the processed reviews for top 20 products
+    postiverate_top20_df= pd.merge(top20prod_df,prod_positive_rate_df,on='prod_name', how = 'left')
+    postiverate_top5_df =postiverate_top20_df.sort_values(by = 'positive_percentage' ,ascending=False)[0:5]
+      
+    return postiverate_top5_df['prod_name']
+
 
