@@ -1,13 +1,9 @@
-click==7.1.2
 Flask==2.0.1
 gunicorn==20.1.0
 gevent
 itsdangerous
 Jinja2==3.0.1
 json5==0.9.6
-MarkupSafe==1.1.1
 Werkzeug==2.0.1
-numpy==1.19.5
 sklearn
 pandas==1.1.3
-pickleshare==0.7.5
