@@ -1,13 +1,7 @@
 from __future__ import division, print_function
 # coding=utf-8
-import sys
-import os
-import glob
-import re
 import pandas as pd
-import numpy as np
 import pickle
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Flask utils
 from flask import Flask, redirect, url_for, request, render_template,render_template_string
