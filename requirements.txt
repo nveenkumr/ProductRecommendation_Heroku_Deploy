@@ -39,3 +39,4 @@ wrapt==1.12.1
 zipp==3.1.0
 sklearn
 pandas
+xgboost
