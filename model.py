@@ -63,28 +63,36 @@ def perform_sentiment_on_top20ProdReviews(username):# ,MODEL_PATH, recommendatio
 
 def cal_top5_prod(username):
     # this is the final function which can be used to call to predict the top 5 products (working in local machine)
-    sentiment_top20_prods = perform_sentiment_on_top20ProdReviews(username)
-    df = sentiment_top20_prods.pivot_table(index ='prod_name' , columns='predicted_sentiment' , values ='predicted_sentiment',
-                              aggfunc ={ 'predicted_sentiment':'count'} )
-    df = df.reset_index()
-    df = df.rename(columns={0: 'class0', 1: 'class1'})
-    df['positive_percentage'] = (df['class1']/(df['class0']+df['class1']))*100
-    df = df.sort_values(by = 'positive_percentage' , ascending = False)  
-    #df = df.reset_index().reset_index()
-    #df = df.rename(columns ={'level_0':'Sno.' , 'prod_name':'ProductName'})
+    result = ''
+    if username in user_final_rating.index:
+        sentiment_top20_prods = perform_sentiment_on_top20ProdReviews(username)
+        df = sentiment_top20_prods.pivot_table(index ='prod_name' , columns='predicted_sentiment' , values ='predicted_sentiment',
+                                  aggfunc ={ 'predicted_sentiment':'count'} )
+        df = df.reset_index()
+        df = df.rename(columns={0: 'class0', 1: 'class1'})
+        df['positive_percentage'] = (df['class1']/(df['class0']+df['class1']))*100
+        df = df.sort_values(by = 'positive_percentage' , ascending = False)
+        result = ",".join(df['prod_name'].values)
+    else:
+        result = "User not found!"
     
-    return df['prod_name'][0:5]
+    return result
 
 def cal_top5_prod_heroku(username):
     
     # this method uses existing postive product rate cv file to get the positive rate for all 20 products and then filter top 20
     # Specially designed to work in Heroku 
-    top20_products = top20_prod_final_rating(username)
-    top20prod_df = top20_products.to_frame().reset_index().rename(columns={'index': 'prod_name'})
-    # merging with processed df to get the processed reviews for top 20 products
-    postiverate_top20_df= pd.merge(top20prod_df,prod_positive_rate_df,on='prod_name', how = 'left')
-    postiverate_top5_df =postiverate_top20_df.sort_values(by = 'positive_percentage' ,ascending=False)[0:5]
+    result = ''
+    if username in user_final_rating.index:
+        top20_products = top20_prod_final_rating(username)
+        top20prod_df = top20_products.to_frame().reset_index().rename(columns={'index': 'prod_name'})
+        # merging with processed df to get the processed reviews for top 20 products
+        postiverate_top20_df= pd.merge(top20prod_df,prod_positive_rate_df,on='prod_name', how = 'left')
+        postiverate_top5_df =postiverate_top20_df.sort_values(by = 'positive_percentage' ,ascending=False)[0:5]
+        result = ",".join(postiverate_top5_df['prod_name'].values)
+    else:
+        result = "User not found!"
       
-    return postiverate_top5_df['prod_name']
+    return result
 
 

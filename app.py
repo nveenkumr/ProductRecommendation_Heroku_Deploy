@@ -26,8 +26,8 @@ def recommend_prod():
         #Get the request data         
         print(request.data.decode('UTF-8'))
         user_name = request.data.decode('UTF-8')
-        top_5_prods = cal_top5_prod_heroku(user_name)
-        result = ",".join(top_5_prods.values)#(top_5_prods['ProductName'].values)
+        result = cal_top5_prod_heroku(user_name)
+        #result = ",".join(top_5_prods.values)#(top_5_prods['ProductName'].values)
         
         return result  #render_template_string (result)
     elif request.method == 'GET':
